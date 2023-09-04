@@ -7,6 +7,7 @@ const addProduct = () =>{
     quantityField.value = ''
     console.log(product, quantity);
     displayProduct(product, quantity)
+    saveProductToLocalStorage(product, quantity)
 } 
 const displayProduct = (product, quantity) =>{
     const ul = document.getElementById('product-container')
@@ -14,3 +15,29 @@ const displayProduct = (product, quantity) =>{
     li.innerText = `${product} : ${quantity}`
     ul.appendChild(li)
 } 
+
+const getStoredShoppingCard = () =>{
+    let card = {}
+    const storedCard = localStorage.getItem('card')
+    if (storedCard) {
+        card = JSON.parse(storedCard)
+    }
+    return card;
+}
+
+const saveProductToLocalStorage = (product, quantity) =>{
+    const card = getStoredShoppingCard()
+    card [product] = quantity;
+    const cardStringified = JSON.stringify(card)
+    localStorage.setItem('card', cardStringified)
+}
+const displayProductFromLocalStorage = () =>{
+    const saveCard = getStoredShoppingCard()
+    console.log(saveCard);
+    for(const product in saveCard){
+        const quantity = saveCard [product]
+        console.log(product, quantity);
+        displayProduct(product, quantity)
+    }
+}
+displayProductFromLocalStorage()
